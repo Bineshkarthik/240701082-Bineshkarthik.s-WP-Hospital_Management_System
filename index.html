@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare – Modern Hospital Management System</title>
+    <meta name="description" content="Digital hospital management solution providing seamless appointment booking, medical records management, prescription tracking, and administrative operations.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Emergency Hotline Header Bar -->
+    <div class="emergency-bar py-2 px-4 d-flex justify-content-between align-items-center">
+        <div>
+            <i class="fas fa-phone-volume text-warning me-2"></i> 24/7 Emergency Ambulance: 
+            <strong class="text-white ms-1">+1 (800) 999-MEDICARE</strong>
+        </div>
+        <div class="d-none d-md-block">
+            <i class="fas fa-location-dot text-info me-2"></i> 742 Evergreen Healthcare Ave, Medical District
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#home" data-navigate="home">
+                <i class="fas fa-hospital-user me-2 text-primary fs-3"></i>
+                <span>Medi<span class="text-primary">Care</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#home" data-navigate="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about" data-navigate="about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#departments" data-navigate="departments">Departments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#doctors" data-navigate="doctors">Doctors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services" data-navigate="services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact" data-navigate="contact">Contact</a></li>
+                    <li class="nav-item d-none" id="dashboard-nav-item"><a class="nav-link fw-bold text-primary" href="#dashboard"><i class="fas fa-columns me-1"></i> Dashboard</a></li>
+                </ul>
+
+                <!-- Auth State Navigation Actions -->
+                <div id="guest-nav-items">
+                    <button class="btn btn-outline-custom me-2" data-navigate="login"><i class="fas fa-sign-in-alt me-1"></i> Login</button>
+                    <button class="btn btn-primary-custom" data-navigate="register"><i class="fas fa-user-plus me-1"></i> Register</button>
+                </div>
+
+                <div id="user-nav-items" class="d-none align-items-center">
+                    <span class="me-3 fw-semibold text-secondary small"><i class="fas fa-user-circle me-1 text-primary fs-5"></i> <span id="user-name-display">User</span></span>
+                    <button class="btn btn-sm btn-outline-danger rounded-pill" onclick="AuthModule.logout()"><i class="fas fa-power-off me-1"></i> Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- PAGE 1: HOME LANDING PAGE -->
+    <div id="page-home" class="view-page">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <span class="hero-badge"><i class="fas fa-shield-heart me-1"></i> Next-Gen Healthcare System</span>
+                        <h1 class="hero-title fw-bold my-3">Advanced Compassionate Care for <span class="text-gradient">Every Patient</span></h1>
+                        <p class="text-muted lead mb-4">Empowering patients, doctors, and healthcare specialists with real-time digital appointment scheduling, electronic medical records, and precision clinical care.</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <button class="btn btn-primary-custom" data-navigate="patient-dashboard"><i class="fas fa-calendar-check me-2"></i> Book an Appointment</button>
+                            <button class="btn btn-outline-custom" data-navigate="doctors"><i class="fas fa-user-md me-2"></i> Find a Doctor</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="position-relative text-center">
+                            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80" alt="Hospital Building" class="img-fluid rounded-4 shadow-lg" style="max-height: 420px; object-fit: cover; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hospital Live Metrics Counters -->
+        <section class="py-5 bg-white border-bottom">
+            <div class="container">
+                <div class="row text-center g-4">
+                    <div class="col-6 col-md-3">
+                        <div class="p-3">
+                            <h2 class="display-5 fw-bold text-primary mb-0">150+</h2>
+                            <p class="text-muted mb-0 fw-medium">Specialist Doctors</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3">
+                            <h2 class="display-5 fw-bold text-primary mb-0">25k+</h2>
+                            <p class="text-muted mb-0 fw-medium">Satisfied Patients</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3">
+                            <h2 class="display-5 fw-bold text-primary mb-0">18+</h2>
+                            <p class="text-muted mb-0 fw-medium">Clinical Departments</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3">
+                            <h2 class="display-5 fw-bold text-primary mb-0">99.8%</h2>
+                            <p class="text-muted mb-0 fw-medium">Positive Recovery Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hospital Departments Section -->
+        <section id="sec-departments" class="py-5">
+            <div class="container">
+                <div class="text-center max-width-700 mx-auto mb-5">
+                    <span class="text-primary fw-bold text-uppercase tracking-wider small">Our Specialties</span>
+                    <h2 class="display-6 fw-bold">Clinical Excellence & Departments</h2>
+                    <p class="text-muted">Explore our state-of-the-art specialized departments staffed by world-class medical experts.</p>
+                </div>
+                <div id="departments-grid" class="row">
+                    <!-- Dynamic Department Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctors Directory & Live Search -->
+        <section id="sec-doctors" class="py-5 bg-light">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                    <div>
+                        <h2 class="h3 fw-bold mb-1">Meet Our Medical Specialists</h2>
+                        <p class="text-muted mb-0">Select a doctor to view qualifications, consultation fee, and available slots.</p>
+                    </div>
+                    <div class="d-flex gap-2 mt-3 mt-md-0">
+                        <input type="text" id="doctor-search-input" class="form-control rounded-pill px-3" placeholder="Search doctor or specialty...">
+                        <select id="doctor-dept-filter" class="form-select rounded-pill px-3" style="min-width: 180px;">
+                            <option value="all">All Departments</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="doctors-grid" class="row">
+                    <!-- Dynamic Doctor Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="py-5 bg-white">
+            <div class="container">
+                <div class="text-center max-width-700 mx-auto mb-5">
+                    <span class="text-primary fw-bold text-uppercase small">Comprehensive Healthcare</span>
+                    <h2 class="display-6 fw-bold">Our Medical Services</h2>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+                            <div class="fs-1 text-primary mb-3"><i class="fas fa-ambulance"></i></div>
+                            <h5 class="fw-bold">24/7 Emergency Care</h5>
+                            <p class="text-muted small">Immediate life-saving response, trauma support, and round-the-clock emergency ICU admission.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+                            <div class="fs-1 text-teal text-success mb-3"><i class="fas fa-microscope"></i></div>
+                            <h5 class="fw-bold">Advanced Diagnostic Labs</h5>
+                            <p class="text-muted small">High-precision pathology, automated blood analytics, molecular diagnostics, and genetic testing.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+                            <div class="fs-1 text-info mb-3"><i class="fas fa-x-ray"></i></div>
+                            <h5 class="fw-bold">Radiology & Imaging</h5>
+                            <p class="text-muted small">State-of-the-art 3T MRI, 128-slice CT Scans, Digital Ultrasound, and Mammography facilities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patient Testimonials -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-6 fw-bold">What Our Patients Say</h2>
+                    <p class="text-muted">Real experiences from patients treated at MediCare Hospital.</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                            <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <p class="text-muted small">"The appointment booking process was seamless, and Dr. Smith provided exceptional care for my heart condition."</p>
+                            <h6 class="fw-bold mb-0">David Henderson</h6>
+                            <span class="small text-muted">Cardiology Patient</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                            <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <p class="text-muted small">"Clean modern hospital facilities, zero wait time, and digital prescription tracking made my visit completely stress-free."</p>
+                            <h6 class="fw-bold mb-0">Sophia Martinez</h6>
+                            <span class="small text-muted">Pediatrics Parent</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                            <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <p class="text-muted small">"Great digital portal! I was able to view all my bill payments and doctor diagnosis notes directly online."</p>
+                            <h6 class="fw-bold mb-0">James Wilson</h6>
+                            <span class="small text-muted">Neurology Patient</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 2: LOGIN PAGE -->
+    <div id="page-login" class="view-page d-none py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card p-4 border-0 shadow-lg rounded-4">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-hospital-user text-primary display-4"></i>
+                            <h3 class="fw-bold mt-2">Sign In to MediCare</h3>
+                            <p class="text-muted small">Enter credentials to access your dashboard</p>
+                        </div>
+
+                        <!-- Quick Demo Credentials Selector -->
+                        <div class="bg-light p-3 rounded-3 mb-3">
+                            <span class="d-block small fw-bold text-muted mb-2">⚡ Quick Fill Demo Logins:</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <button class="demo-role-btn" onclick="AuthModule.fillDemoCredentials('admin')">🔑 Admin</button>
+                                <button class="demo-role-btn" onclick="AuthModule.fillDemoCredentials('doctor')">🩺 Doctor</button>
+                                <button class="demo-role-btn" onclick="AuthModule.fillDemoCredentials('patient')">👤 Patient</button>
+                                <button class="demo-role-btn" onclick="AuthModule.fillDemoCredentials('receptionist')">📋 Receptionist</button>
+                            </div>
+                        </div>
+
+                        <form id="login-form">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold small">Email Address</label>
+                                <input type="email" id="login-email" class="form-control" required placeholder="name@medicare.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold small">Password</label>
+                                <input type="password" id="login-password" class="form-control" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary-custom w-100 py-2">Sign In</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Don't have a patient account? <a href="#register" class="text-primary fw-semibold" data-navigate="register">Register Here</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: REGISTER PAGE -->
+    <div id="page-register" class="view-page d-none py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <div class="card p-4 border-0 shadow-lg rounded-4">
+                        <div class="text-center mb-4">
+                            <h3 class="fw-bold">Patient Registration</h3>
+                            <p class="text-muted small">Create an account to book appointments & view medical history</p>
+                        </div>
+                        <form id="register-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Full Name *</label>
+                                    <input type="text" id="reg-name" class="form-control" required placeholder="John Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Email Address *</label>
+                                    <input type="email" id="reg-email" class="form-control" required placeholder="john@gmail.com">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Password *</label>
+                                    <input type="password" id="reg-password" class="form-control" required placeholder="Password@123">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Phone Number</label>
+                                    <input type="tel" id="reg-phone" class="form-control" placeholder="+1 (555) 000-0000">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-semibold">Date of Birth</label>
+                                    <input type="date" id="reg-dob" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-semibold">Gender</label>
+                                    <select id="reg-gender" class="form-select">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-semibold">Blood Group</label>
+                                    <select id="reg-blood" class="form-select">
+                                        <option value="O+">O+</option>
+                                        <option value="A+">A+</option>
+                                        <option value="B+">B+</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B-">B-</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label small fw-semibold">Address</label>
+                                    <input type="text" id="reg-address" class="form-control" placeholder="Street, City, State">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-semibold">Emergency Contact</label>
+                                    <input type="tel" id="reg-emergency" class="form-control" placeholder="+1 (555) 999-0000">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary-custom w-100 mt-4 py-2">Create Patient Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: ADMIN DASHBOARD -->
+    <div id="page-admin-dashboard" class="view-page d-none">
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <h5 class="text-white mb-4 px-2"><i class="fas fa-user-shield me-2 text-primary"></i> Admin Panel</h5>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item"><a href="#admin-overview" class="nav-link active"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                    <li class="nav-item"><a href="#admin-doctors" class="nav-link" onclick="document.getElementById('sec-admin-doctors-table').scrollIntoView()"><i class="fas fa-user-md"></i> Manage Doctors</a></li>
+                    <li class="nav-item"><a href="#admin-patients" class="nav-link" onclick="document.getElementById('sec-admin-patients-table').scrollIntoView()"><i class="fas fa-user-injured"></i> Manage Patients</a></li>
+                    <li class="nav-item"><a href="#admin-staff" class="nav-link" onclick="document.getElementById('sec-admin-staff-table').scrollIntoView()"><i class="fas fa-users-cog"></i> Hospital Staff</a></li>
+                </ul>
+            </aside>
+            <main class="dashboard-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="fw-bold mb-0">System Analytics & Administration</h3>
+                        <p class="text-muted small">Real-time hospital operation statistics</p>
+                    </div>
+                    <button class="btn btn-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#modal-admin-add-doctor">
+                        <i class="fas fa-plus me-1"></i> Add New Doctor
+                    </button>
+                </div>
+
+                <!-- Admin Metrics Cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Total Patients</span>
+                            <h3 id="admin-stat-patients" class="fw-bold text-primary mb-0">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Total Doctors</span>
+                            <h3 id="admin-stat-doctors" class="fw-bold text-teal mb-0">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Today's Appts</span>
+                            <h3 id="admin-stat-today-app" class="fw-bold text-info mb-0">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Pending Appts</span>
+                            <h3 id="admin-stat-pending-app" class="fw-bold text-warning mb-0">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Total Revenue</span>
+                            <h3 id="admin-stat-revenue" class="fw-bold text-success mb-0">$0</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="metric-card">
+                            <span class="text-muted small">Available Beds</span>
+                            <h3 id="admin-stat-beds" class="fw-bold text-dark mb-0">42</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Dynamic Charts -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="card p-3 border-0 shadow-sm rounded-4">
+                            <h6 class="fw-bold">Monthly Appointments</h6>
+                            <canvas id="chart-monthly-appointments" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 border-0 shadow-sm rounded-4">
+                            <h6 class="fw-bold">Revenue Growth ($)</h6>
+                            <canvas id="chart-revenue" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 border-0 shadow-sm rounded-4">
+                            <h6 class="fw-bold">Department Patients Distribution</h6>
+                            <canvas id="chart-departments" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctors Management Table -->
+                <div id="sec-admin-doctors-table" class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-user-md text-primary me-2"></i> Doctor Directory</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Doctor Name</th>
+                                    <th>Department</th>
+                                    <th>Specialization</th>
+                                    <th>Experience</th>
+                                    <th>Fee</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-doctors-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Patients Management Table -->
+                <div id="sec-admin-patients-table" class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-users text-success me-2"></i> Registered Patients</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Blood Group</th>
+                                    <th>Date of Birth</th>
+                                    <th>Emergency Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-patients-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Hospital Staff Table -->
+                <div id="sec-admin-staff-table" class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0"><i class="fas fa-users-cog text-info me-2"></i> Hospital Staff</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Staff Name</th>
+                                    <th>Role</th>
+                                    <th>Department</th>
+                                    <th>Phone</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-staff-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- PAGE 5: DOCTOR DASHBOARD -->
+    <div id="page-doctor-dashboard" class="view-page d-none">
+        <div class="container py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold mb-0"><i class="fas fa-user-md text-primary me-2"></i> Doctor Console</h3>
+                    <p class="text-muted small">Manage today's appointments, write diagnosis, and prescribe medicines</p>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="metric-card bg-primary text-white">
+                        <span>Today's Scheduled Patients</span>
+                        <h2 id="doc-today-count" class="fw-bold text-white mb-0">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="metric-card bg-dark text-white">
+                        <span>Assigned Unique Patients</span>
+                        <h2 id="doc-assigned-count" class="fw-bold text-white mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Appointments Table -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-calendar-day text-primary me-2"></i> Today's Appointments</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Time Slot</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doc-today-appointments-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Assigned Patients Card List -->
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-id-card-clip text-info me-2"></i> Assigned Patient Records</h5>
+                </div>
+                <div class="card-body" id="doc-assigned-patients-list">
+                    <!-- Dynamic assigned patient cards -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 6: PATIENT DASHBOARD -->
+    <div id="page-patient-dashboard" class="view-page d-none">
+        <div class="container py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card p-4 border-0 shadow-sm bg-gradient-primary text-white rounded-4" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+                        <h3 class="fw-bold mb-1">Welcome to Your Patient Health Portal</h3>
+                        <p class="mb-0 text-white-50">Schedule appointments, review prescribed medicines, and pay consultation bills online.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Appointment Booking Wizard Card -->
+            <div id="appointment-booking-card" class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-calendar-plus text-primary me-2"></i> Book Doctor Appointment</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form id="form-patient-book-appointment">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Select Specialist Doctor *</label>
+                                <select id="pat-book-doctor" class="form-select" required></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Appointment Date *</label>
+                                <input type="date" id="pat-book-date" class="form-control" required min="2026-10-08">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Available Time Slot *</label>
+                                <select id="pat-book-time" class="form-select" required>
+                                    <option value="09:00 AM">09:00 AM</option>
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:30 AM">11:30 AM</option>
+                                    <option value="02:00 PM">02:00 PM</option>
+                                    <option value="03:30 PM">03:30 PM</option>
+                                    <option value="04:30 PM">04:30 PM</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Reason for Visit / Symptoms</label>
+                                <input type="text" id="pat-book-reason" class="form-control" placeholder="e.g. Fever, chest pain, routine checkup...">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom mt-3"><i class="fas fa-check-circle me-1"></i> Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Patient Tabs: Appointments, Prescriptions, History, Bills -->
+            <ul class="nav nav-tabs nav-fill mb-3" id="patientTabs" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-pat-app"><i class="fas fa-calendar-alt me-1"></i> My Appointments</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pat-rx"><i class="fas fa-prescription me-1"></i> Prescriptions</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pat-history"><i class="fas fa-file-medical me-1"></i> Medical History</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pat-billing"><i class="fas fa-file-invoice-dollar me-1"></i> Billing & Payments</button></li>
+            </ul>
+
+            <div class="tab-content" id="patientTabContent">
+                <!-- Tab 1: Appointments -->
+                <div class="tab-pane fade show active" id="tab-pat-app">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Doctor</th>
+                                    <th>Specialization</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pat-appointments-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Prescriptions -->
+                <div class="tab-pane fade" id="tab-pat-rx">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Dosage</th>
+                                    <th>Duration</th>
+                                    <th>Prescribed By</th>
+                                    <th>Instructions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pat-prescriptions-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 3: History -->
+                <div class="tab-pane fade" id="tab-pat-history">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Diagnosis</th>
+                                    <th>Symptoms</th>
+                                    <th>Treatment</th>
+                                    <th>Doctor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pat-records-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Billing -->
+                <div class="tab-pane fade" id="tab-pat-billing">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Payment Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pat-billing-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 7: RECEPTIONIST DASHBOARD -->
+    <div id="page-receptionist-dashboard" class="view-page d-none">
+        <div class="container py-4">
+            <h3 class="fw-bold mb-3"><i class="fas fa-clipboard-user text-primary me-2"></i> Reception Desk Console</h3>
+            
+            <div class="row g-4 mb-4">
+                <!-- Register Walk-in Patient -->
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <h5 class="fw-bold mb-3"><i class="fas fa-user-plus text-primary me-2"></i> Quick Walk-in Patient Registration</h5>
+                        <form id="form-rec-register-patient">
+                            <div class="mb-2"><input type="text" id="rec-pat-name" class="form-control" required placeholder="Patient Full Name *"></div>
+                            <div class="mb-2"><input type="email" id="rec-pat-email" class="form-control" placeholder="Email Address"></div>
+                            <div class="mb-2"><input type="tel" id="rec-pat-phone" class="form-control" required placeholder="Phone Number *"></div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6"><input type="date" id="rec-pat-dob" class="form-control"></div>
+                                <div class="col-6">
+                                    <select id="rec-pat-gender" class="form-select">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <select id="rec-pat-blood" class="form-select">
+                                    <option value="O+">Blood Group: O+</option>
+                                    <option value="A+">Blood Group: A+</option>
+                                    <option value="B+">Blood Group: B+</option>
+                                    <option value="AB+">Blood Group: AB+</option>
+                                </select>
+                            </div>
+                            <div class="mb-3"><input type="text" id="rec-pat-address" class="form-control" placeholder="Address"></div>
+                            <button type="submit" class="btn btn-primary-custom w-100">Register Walk-in Patient</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Generate Bill -->
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <h5 class="fw-bold mb-3"><i class="fas fa-receipt text-success me-2"></i> Generate Patient Invoice</h5>
+                        <form id="form-rec-generate-bill">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Patient *</label>
+                                <select id="rec-bill-patient" class="form-select" required></select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Invoice Amount ($) *</label>
+                                <input type="number" step="0.01" id="rec-bill-amount" class="form-control" required placeholder="e.g. 150.00">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Payment Mode</label>
+                                <select id="rec-bill-method" class="form-select">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Insurance">Insurance</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 py-2 rounded-pill fw-semibold">Generate Bill</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Appointment Schedule Timeline -->
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-clock text-info me-2"></i> Today's Appointment Schedule</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Patient Name</th>
+                                <th>Doctor</th>
+                                <th>Specialization</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rec-schedule-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Modal 1: Doctor Diagnosis -->
+    <div class="modal fade" id="modal-diagnosis" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-header-title fw-bold mb-0">Add Clinical Diagnosis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-add-diagnosis">
+                    <div class="modal-body">
+                        <input type="hidden" id="diag-patient-id">
+                        <div class="alert alert-info py-2 small">Patient: <strong id="diag-patient-name-display">Name</strong></div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Diagnosis Title *</label>
+                            <input type="text" id="diag-diagnosis" class="form-control" required placeholder="e.g. Acute Bronchitis">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Symptoms</label>
+                            <textarea id="diag-symptoms" class="form-control" rows="2" placeholder="Fever, cough..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Treatment Plan</label>
+                            <textarea id="diag-treatment" class="form-control" rows="2" placeholder="Rest, hydration..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Notes</label>
+                            <textarea id="diag-notes" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary-custom w-100">Save Medical Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Doctor Prescription -->
+    <div class="modal fade" id="modal-prescription" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-header-title fw-bold mb-0">Issue Prescription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-add-prescription">
+                    <div class="modal-body">
+                        <input type="hidden" id="rx-patient-id">
+                        <div class="alert alert-success py-2 small">Prescribing for: <strong id="rx-patient-name-display">Name</strong></div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Medicine Name *</label>
+                            <input type="text" id="rx-medicine" class="form-control" required placeholder="e.g. Amoxicillin 500mg">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Dosage *</label>
+                                <input type="text" id="rx-dosage" class="form-control" required placeholder="1 Tab twice daily">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Duration *</label>
+                                <input type="text" id="rx-duration" class="form-control" required placeholder="7 Days">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Instructions</label>
+                            <input type="text" id="rx-instructions" class="form-control" placeholder="Take after meals with water">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success w-100 rounded-pill">Issue Prescription</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Admin Add Doctor -->
+    <div class="modal fade" id="modal-admin-add-doctor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-header-title fw-bold mb-0">Add New Doctor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-admin-add-doctor">
+                    <div class="modal-body">
+                        <div class="mb-2"><input type="text" id="admin-doc-name" class="form-control" required placeholder="Doctor Name (e.g. Dr. Jane Smith) *"></div>
+                        <div class="mb-2"><input type="email" id="admin-doc-email" class="form-control" required placeholder="Email Address *"></div>
+                        <div class="mb-2"><input type="password" id="admin-doc-pass" class="form-control" required placeholder="Account Password *"></div>
+                        <div class="mb-2"><input type="tel" id="admin-doc-phone" class="form-control" placeholder="Phone Number"></div>
+                        <div class="mb-2">
+                            <select id="admin-doc-dept" class="form-select" required>
+                                <option value="1">Cardiology</option>
+                                <option value="2">Neurology</option>
+                                <option value="3">Pediatrics</option>
+                                <option value="4">Orthopedics</option>
+                                <option value="5">Dermatology</option>
+                                <option value="6">General Medicine</option>
+                            </select>
+                        </div>
+                        <div class="mb-2"><input type="text" id="admin-doc-spec" class="form-control" required placeholder="Specialization (e.g. Cardiologist)"></div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><input type="text" id="admin-doc-qual" class="form-control" placeholder="Qualification (MD)"></div>
+                            <div class="col-6"><input type="text" id="admin-doc-exp" class="form-control" placeholder="Experience (e.g. 10 years)"></div>
+                        </div>
+                        <div class="mb-2"><input type="number" id="admin-doc-fee" class="form-control" placeholder="Consultation Fee ($)" value="100"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary-custom w-100">Create Doctor Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: View Patient History -->
+    <div class="modal fade" id="modal-patient-history" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-header-title fw-bold mb-0">Patient Clinical History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="patient-history-modal-body">
+                    <!-- Dynamic history content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold text-white mb-3"><i class="fas fa-hospital-user text-primary me-2"></i> MediCare Hospital</h5>
+                    <p class="small text-muted">A modern digital hospital management ecosystem designed for seamless healthcare administration, real-time appointment booking, and patient records.</p>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="text-white fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#home" data-navigate="home">Home</a></li>
+                        <li class="mb-2"><a href="#about" data-navigate="home">About Hospital</a></li>
+                        <li class="mb-2"><a href="#departments" data-navigate="home">Departments</a></li>
+                        <li class="mb-2"><a href="#doctors" data-navigate="home">Doctors</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <h6 class="text-white fw-bold mb-3">Departments</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><span class="text-muted">Cardiology</span></li>
+                        <li class="mb-2"><span class="text-muted">Neurology</span></li>
+                        <li class="mb-2"><span class="text-muted">Pediatrics</span></li>
+                        <li class="mb-2"><span class="text-muted">Orthopedics</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="text-white fw-bold mb-3">Emergency Contact</h6>
+                    <p class="small text-muted mb-1"><i class="fas fa-phone text-primary me-2"></i> Emergency: +1 (800) 999-MEDICARE</p>
+                    <p class="small text-muted mb-1"><i class="fas fa-envelope text-primary me-2"></i> support@medicare-hospital.com</p>
+                    <p class="small text-muted"><i class="fas fa-location-dot text-primary me-2"></i> 742 Evergreen Healthcare Ave</p>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="text-center small text-muted">
+                © 2026 MediCare Hospital Management System. Built for Web Programming Project.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- App Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboards.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

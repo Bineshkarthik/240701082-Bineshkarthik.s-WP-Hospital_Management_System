@@ -1,0 +1,33 @@
+{
+  "name": "medicare-hospital-management-system",
+  "version": "1.0.0",
+  "description": "A complete, modern and responsive Hospital Management System web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "init-db": "node database/init_db.js"
+  },
+  "keywords": [
+    "hospital-management",
+    "express",
+    "mysql",
+    "nodejs",
+    "rest-api",
+    "bootstrap"
+  ],
+  "author": "MediCare Team",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.7",
+    "serverless-http": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
